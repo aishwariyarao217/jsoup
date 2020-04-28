@@ -8,8 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.jsoup.select.Selector.SelectorParseException;
+import org.junit.jupiter.api.Assertions;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Tests for Element (DOM stuff mostly).
@@ -162,7 +165,102 @@ public class ElementTest {
         assertEquals(1, ps.get(1).elementSiblingIndex());
         assertEquals(2, ps.get(2).elementSiblingIndex());
     }
-
+    //Added by Aishwariya  
+    @Test public void testElementSiblingIndexForNoSibling1() {
+        //if there is no sibling, it should return 0 
+        Document doc1 = Jsoup.parse("<p> My name is Aishwariya </p>");
+        Elements ps = doc1.select("p");
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+    }
+    
+    //Added by Aishwariya
+    @Test public void testElementSiblingIndexForNoSibling2() {
+        //if there is no sibling, it should return 0 
+        Document doc1 = Jsoup.parse("<html> </html>");
+        Elements ps = doc1.select("html");
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+    }
+    
+    //Added by Aishwariya
+    @Test public void testElementSiblingIndexForNoSibling3() {
+        //if there is no sibling, it should return 0 
+        Document doc1 = Jsoup.parse("<p> Testing what happens with <b> BOLD </b> </p>");
+        Elements ps = doc1.select("html");
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+    }
+    
+    //Added by Aishwariya 
+    @Test public void testElementSiblingIndexForOneSibling1() {
+        Document doc2 = Jsoup.parse("<p> My name is Aishwariya </p> </p> Testing this code out </p>");
+        Elements ps = doc2.select("p");
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+        assertEquals(1, ps.get(1).elementSiblingIndex());
+    }
+    //Added  by Aishwariya  
+    @Test public void testElementSiblingIndexForOneSibling2() {
+        //to make sure it doesnt consider different tags to be siblings 
+        //if assertEquals(1, ps.get(1).elementSiblingIndex) it throws an expected IndexOutOfBoundsException
+        Document doc2 = Jsoup.parse("<div><p> My name is Aishwariya </p> <p> Rao </p> </div>");
+        Elements ps = doc2.select("p");
+        Elements ps1 = doc2.select("div");
+        assertEquals(0, ps1.get(0).elementSiblingIndex());
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+        assertEquals(1, ps.get(1).elementSiblingIndex());
+    }
+    
+    //Added by Aishwariya 
+    @Test public void testElementSiblingIndexMultipleSiblings() {
+        Document doc6 = Jsoup.parse("<div><p>One</p><p>Two</p><p>Three</p><p>Four</p><p>Five</p>");
+        Elements ps = doc6.select("p");
+        Elements ps1 = doc6.select("div");
+        assertEquals(0, ps1.get(0).elementSiblingIndex());
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+        assertEquals(1, ps.get(1).elementSiblingIndex());
+        assertEquals(2, ps.get(2).elementSiblingIndex());
+        assertEquals(3, ps.get(3).elementSiblingIndex());
+        assertEquals(4, ps.get(4).elementSiblingIndex());
+    }
+    
+        //Added by Aishwariya 
+    @Test public void testElementSiblingIndexMultipleSiblings2() {
+        Document doc7 = Jsoup.parse("<div><p>One</p><p>Two</p></div><div><p>Three</p><p>Four</p></div>");
+        Elements ps = doc7.select("p");
+        Elements ps1 = doc7.select("div");
+        assertEquals(0, ps1.get(0).elementSiblingIndex());
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+        assertEquals(1, ps.get(1).elementSiblingIndex());
+        assertEquals(0, ps1.get(0).elementSiblingIndex());
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+        assertEquals(1, ps.get(1).elementSiblingIndex());
+    }
+    
+            //Added by Aishwariya 
+    @Test public void testElementSiblingIndexMultipleSiblingsSameText() {
+        Document doc7 = Jsoup.parse("<p>One</p><p>One<p>One</p>");
+        Elements ps = doc7.select("p");
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+        assertEquals(1, ps.get(1).elementSiblingIndex());
+        assertEquals(2, ps.get(2).elementSiblingIndex());
+    }
+   /* 
+    //Added by Aishwariya 
+    @Test public void testElementSiblingIndexForTableRowEntries() {
+     Document doc5 = Jsoup.parse("<table> <tr> </tr> </table>");
+     Elements ps = doc5.select("table");
+     Elements ps1 = doc5.select("tr");
+     assertEquals(0, ps.get(0).elementSiblingIndex());
+     assertEquals(0, ps1.get(0).elementSiblingIndex());
+    }
+    
+    //added by Aishwariya 
+    @Test public void testElementSiblingIndexForParaWithBoldTag() {
+        Document doc = Jsoup.parse("<p>Once <b> upon </b> a time </p>");
+        Elements ps = doc.select("p");
+        Elements ps1 = doc.select("b");
+        assertEquals(0, ps.get(0).elementSiblingIndex());
+        assertEquals(0, ps1.get().elementSiblingIndex());
+    }
+    */
     @Test public void testElementSiblingIndexSameContent() {
         Document doc = Jsoup.parse("<div><p>One</p>...<p>One</p>...<p>One</p>");
         Elements ps = doc.select("p");
