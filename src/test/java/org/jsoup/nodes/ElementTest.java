@@ -251,15 +251,6 @@ public class ElementTest {
      assertEquals(0, ps.get(0).elementSiblingIndex());
      assertEquals(0, ps1.get(0).elementSiblingIndex());
     }
-    
-    //added by Aishwariya 
-    @Test public void testElementSiblingIndexForParaWithBoldTag() {
-        Document doc = Jsoup.parse("<p>Once <b> upon </b> a time </p>");
-        Elements ps = doc.select("p");
-        Elements ps1 = doc.select("b");
-        assertEquals(0, ps.get(0).elementSiblingIndex());
-        assertEquals(0, ps1.get().elementSiblingIndex());
-    }
     */
     @Test public void testElementSiblingIndexSameContent() {
         Document doc = Jsoup.parse("<div><p>One</p>...<p>One</p>...<p>One</p>");
