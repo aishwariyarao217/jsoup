@@ -254,15 +254,7 @@
     </profile>
   </profiles>
 
-  <dependencies>
-    <dependency>
-      <!-- https://mvnrepository.com/artifact/org.mockito/mockito-all -->
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>1.9.5</version>
-      <scope>test</scope>
-    </dependency>
-    
+  <dependencies>    
     <!-- junit -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -270,7 +262,21 @@
       <version>5.6.0</version>
       <scope>test</scope>
     </dependency>
-
+    
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>2.21.0</version>
+        <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>2.23.0</version>
+        <scope>test</scope>
+    </dependency>
+    
     <dependency>
       <!-- gson, to fetch entities from w3.org -->
       <groupId>com.google.code.gson</groupId>
