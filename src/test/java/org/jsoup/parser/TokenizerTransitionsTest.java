@@ -59,7 +59,7 @@ public class TokenizerTransitionsTest {
     }
     
         @Test
-    public void testAfterAttributeName() {
+    public void testAttributeNameAFterTag() {
         Tokeniser tokeniser = setup("color", TokeniserState.AfterAttributeName);
         InOrder inOrder = Mockito.inOrder(tokeniser);
         tokeniser.createTagPending(true);
