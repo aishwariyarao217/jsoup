@@ -33,9 +33,6 @@ public class XmlTreeBuilder extends TreeBuilder {
         doc.outputSettings().syntax(Document.OutputSettings.Syntax.xml);
     }
 
-    Document parse(Reader input, String baseUri) {
-        return parse(input, baseUri, new Parser(this));
-    }
 
     Document parse(String input, String baseUri) {
         return parse(new StringReader(input), baseUri, new Parser(this));

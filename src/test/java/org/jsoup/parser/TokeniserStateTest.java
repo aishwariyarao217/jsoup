@@ -110,6 +110,7 @@ public class TokeniserStateTest {
         }
     }
 
+
     @Test
     public void testCommentEndCoverage() {
         String html = "<html><head></head><body><img src=foo><!-- <table><tr><td></table> --! --- --><p>Hello</p></body></html>";

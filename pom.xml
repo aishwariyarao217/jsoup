@@ -178,6 +178,7 @@
           <threadCount>8</threadCount>
         </configuration>
       </plugin>
+        
     </plugins>
     <resources>
       <resource>
@@ -192,6 +193,7 @@
       </resource>
     </resources>
   </build>
+ 
 
   <distributionManagement>
     <snapshotRepository>
@@ -251,6 +253,8 @@
           </plugin>
         </plugins>
       </build>
+      
+      
     </profile>
   </profiles>
 
@@ -301,6 +305,13 @@
       <version>9.4.26.v20200117</version>
       <scope>test</scope>
     </dependency>
+    
+<!-- https://mvnrepository.com/artifact/org.jacoco/jacoco-maven-plugin -->
+<dependency>
+    <groupId>org.jacoco</groupId>
+    <artifactId>jacoco-maven-plugin</artifactId>
+    <version>0.8.5</version>
+</dependency>
 
   </dependencies>
 

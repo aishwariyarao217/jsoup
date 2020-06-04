@@ -79,10 +79,81 @@ public class HtmlTreeBuilder extends TreeBuilder {
         fragmentParsing = false;
     }
 
+    //code added by Aishwariya
+    protected void initialiseParse1(Reader input, Document document, Parser parser) {
+        super.initialiseParse1(input, document, parser);
+
+        // this is a bit mucky. todo - probably just create new parser objects to ensure all reset.
+        state = HtmlTreeBuilderState.Initial;
+        originalState = null;
+        baseUriSetFromDoc = false;
+        headElement = null;
+        formElement = null;
+        contextElement = null;
+        formattingElements = new ArrayList<>();
+        pendingTableCharacters = new ArrayList<>();
+        emptyEnd = new Token.EndTag();
+        framesetOk = true;
+        fosterInserts = false;
+        fragmentParsing = false;
+    }
+    //part of initial code
     List<Node> parseFragment(String inputFragment, Element context, String baseUri, Parser parser) {
         // context may be null
         state = HtmlTreeBuilderState.Initial;
         initialiseParse(new StringReader(inputFragment), baseUri, parser);
+        contextElement = context;
+        fragmentParsing = true;
+        Element root = null;
+
+        if (context != null) {
+            if (context.ownerDocument() != null) // quirks setup:
+                doc.quirksMode(context.ownerDocument().quirksMode());
+
+            // initialise the tokeniser state:
+            String contextTag = context.normalName();
+            if (StringUtil.in(contextTag, "title", "textarea"))
+                tokeniser.transition(TokeniserState.Rcdata);
+            else if (StringUtil.in(contextTag, "iframe", "noembed", "noframes", "style", "xmp"))
+                tokeniser.transition(TokeniserState.Rawtext);
+            else if (contextTag.equals("script"))
+                tokeniser.transition(TokeniserState.ScriptData);
+            else if (contextTag.equals(("noscript")))
+                tokeniser.transition(TokeniserState.Data); // if scripting enabled, rawtext
+            else if (contextTag.equals("plaintext"))
+                tokeniser.transition(TokeniserState.Data);
+            else
+                tokeniser.transition(TokeniserState.Data); // default
+
+            root = new Element(Tag.valueOf("html", settings), baseUri);
+            doc.appendChild(root);
+            stack.add(root);
+            resetInsertionMode();
+
+            // setup form element to nearest form on context (up ancestor chain). ensures form controls are associated
+            // with form correctly
+            Elements contextChain = context.parents();
+            contextChain.add(0, context);
+            for (Element parent: contextChain) {
+                if (parent instanceof FormElement) {
+                    formElement = (FormElement) parent;
+                    break;
+                }
+            }
+        }
+
+        runParser();
+        if (context != null)
+            return root.childNodes();
+        else
+            return doc.childNodes();
+    }
+
+    //Code added by Aishwariya
+    List<Node> parseFragment1(String inputFragment, Element context, Document document, Parser parser) {
+        // context may be null
+        state = HtmlTreeBuilderState.Initial;
+        initialiseParse1(new StringReader(inputFragment), document, parser);
         contextElement = context;
         fragmentParsing = true;
         Element root = null;
